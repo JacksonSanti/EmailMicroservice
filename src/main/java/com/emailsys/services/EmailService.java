@@ -1,5 +1,10 @@
 package com.emailsys.services;
 
+import java.util.Optional;
+
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -19,6 +24,7 @@ public class EmailService {
 	@Autowired
 	private JavaMailSender emailSender;
 
+	@Transactional
 	public Object save(EmailModel emailModel) {
 		return emailRepository.save(emailModel);
 	}
@@ -36,5 +42,26 @@ public class EmailService {
 		} catch(MailException e) {
 			emailModel.setStatusEmail(StatusEmail.ERROR);
 		}
+	}
+
+
+	public Object findAll() {
+		return emailRepository.findAll();
+	}
+
+
+	public Optional<EmailModel> findOne(@Valid Integer id) {
+		return emailRepository.findById(id);
+	}
+
+	@Transactional
+	public void delete(@Valid Integer id) {
+		emailRepository.deleteById(id);
+		
+	}
+
+	@Transactional
+	public void deleteAll() {
+		emailRepository.deleteAll();
 	}
 }
